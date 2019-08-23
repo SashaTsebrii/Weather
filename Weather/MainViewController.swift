@@ -14,7 +14,7 @@ class MainViewController: UIViewController {
     
     let locationManager = CLLocationManager()
     var firstTime = false
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,36 +28,31 @@ class MainViewController: UIViewController {
         
     }
     
-    fileprivate func fetchWeatherJSON(latitude: Double,
-                                      longitude: Double,
-                                      completion: @escaping (WeatherData?, Error?) -> ()) {
+    fileprivate func fetchWeatherDataJSON(latitude: Double,
+                                          longitude: Double,
+                                          completion: @escaping (Result<WeatherData, Error>) -> ()) {
         
         let baseUrl = "https://api.openweathermap.org/data/2.5/weather?lat=\(Int(latitude))&lon=\(Int(longitude))"
         let appId = "&appid=ef5d4887deb3458a3a2496acdb4f8b5e"
         let urlString = baseUrl + appId
-        guard let url = URL(string: urlString) else {
-            print("Failed url")
-            return
-        }
+        guard let url = URL(string: urlString) else { return }
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if let error = error {
-                // unsuccessful
-                completion(nil, error)
+                completion(.failure(error))
                 return
             }
             
             // successful
             do {
-                let weather = try JSONDecoder().decode(WeatherData.self, from: data!)
-                completion(weather, nil)
-            } catch let jsonError{
-                completion(nil, jsonError)
+                let courses = try JSONDecoder().decode(WeatherData.self, from: data!)
+                completion(.success(courses))
+            } catch let jsonError {
+                completion(.failure(jsonError))
             }
             
-        }.resume()
-        
+            }.resume()
     }
     
 }
@@ -72,18 +67,16 @@ extension MainViewController: CLLocationManagerDelegate {
         if firstTime == false {
             firstTime = true
             
-            fetchWeatherJSON(latitude: locationCoordinate.latitude,
-                             longitude: locationCoordinate.longitude) { (weather, error) in
-                if let error = error {
-                    print("Failed to fetch weather:", error)
-                    return
-                }
-                
-                if let weather = weather {
-                    print(weather)
-                }
-                
+            fetchWeatherDataJSON(latitude: locationCoordinate.latitude,
+                                 longitude: locationCoordinate.longitude) { (result) in
+                                    switch result {
+                                    case .success(let weather):
+                                        print(weather)
+                                    case .failure(let error):
+                                        print("Failed to fetch weather:", error)
+                                    }
             }
+            
         }
         
     }
