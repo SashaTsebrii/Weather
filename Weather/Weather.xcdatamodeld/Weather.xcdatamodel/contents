@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G87" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="MoodData" representedClassName="MoodData" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="locationString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="moodImage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pressureString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="temperatureString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uvIndexString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="weatherImage" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="MoodData" positionX="-63" positionY="-18" width="128" height="150"/>
+    </elements>
+</model>
